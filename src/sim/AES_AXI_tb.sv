@@ -65,11 +65,9 @@ import design_1_axi_vip_1_0_pkg::*;
 //////////////////////////////////////////////////////////////////////////////////
 // Clock and Reset
 bit aclk = 0, aresetn = 1;
-//Simulation output
-bit led_1, switch_1;
+
+
 //AXI4-Lite signals
-
-
 xil_axi_resp_t 	resp;
 xil_axi_resp_t [255:0]    resp_full;
 xil_axi_data_beat [255:0] ruser_full;
@@ -114,42 +112,19 @@ design_1_axi_vip_0_0_mst_t      master_agent_vpi0;
 design_1_axi_vip_1_0_mst_t      master_agent_vpi1;
  
 
- 
-//bit[127:0] plaintext0 = 128'hD099E3372D5825E31CDCEC9D78EEFA30;
-//bit[127:0] plaintext1 = 128'h36E3FE1BA0BE59FC844078E3CC8ACD1A;
-//bit[127:0] plaintext2 = 128'h69C3FF99D962C8A329FF472D36CE3846;
-//bit[127:0] plaintext3 = 128'hCE13D5CE9EA533FC7472C1344644C359;
-
-//bit[127:0] plaintext0 = 128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-//bit[127:0] plaintext1 = 128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-//bit[127:0] plaintext2 = 128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-//bit[127:0] plaintext3 = 128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-
 bit[127:0] plaintext0 = 128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
 bit[127:0] plaintext1 = 128'hBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB;
 bit[127:0] plaintext2 = 128'h11111111111111111111111111111111;
 bit[127:0] plaintext3 = 128'h44444444444444444444444444444444;
 
-//bit[127:0] expected0 = 128'h5c8a4eabab1dc7ca9179e0317d6f85c3;
-//bit[127:0] expected1 = 128'h9c690216e96fed9b90d823741d5663b0;
-//bit[127:0] expected2 = 128'he4706f7d22cbd2805b8a745bc59b38ec;
-//bit[127:0] expected3 = 128'hfc4407729cefda1daad5ed06f26d1675;
 
 bit[127:0] expected0 = 128'h35731bf7703ba672451cc0adeb7b8d4a;
 bit[127:0] expected1 = 128'h35731bf7703ba672451cc0adeb7b8d4a;
 bit[127:0] expected2 = 128'h35731bf7703ba672451cc0adeb7b8d4a;
 bit[127:0] expected3 = 128'h35731bf7703ba672451cc0adeb7b8d4a;
-
-
-
-
-
-
     
 bit [255:0] data_1;
 bit [255:0] data_2;
-
-
 
 //
 initial begin    
@@ -165,6 +140,7 @@ initial begin
     wait (aresetn == 1'b1);
 
 
+    //fill the BRAM with some values
     master_agent_vpi1.AXI4LITE_WRITE_BURST(base_addr + 0,0,plaintext0[31:0  ],resp);
     master_agent_vpi1.AXI4LITE_WRITE_BURST(base_addr + 4,0,plaintext0[63:32 ],resp);
     master_agent_vpi1.AXI4LITE_WRITE_BURST(base_addr + 8,0,plaintext0[95:64 ],resp);
@@ -190,6 +166,7 @@ initial begin
     #100ns;
     
     
+    // Read with AXI VIP 0 (data will be decrypted on the fly with the AES module)
     master_agent_vpi0.AXI4_READ_BURST(
     0,
     base_addr,
