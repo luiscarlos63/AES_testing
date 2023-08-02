@@ -1,0 +1,17 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Wed Aug  2 15:54:24 2023
+# Process ID: 214129
+# Current directory: /home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing
+# Command line: vivado
+# Log file: /home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing/vivado.log
+# Journal file: /home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing/vivado.jou
+# Running On: luiscarlos-GL552VX, OS: Linux, CPU Frequency: 2600.000 MHz, CPU Physical cores: 4, Host memory: 8213 MB
+#-----------------------------------------------------------
+start_gui
+create_project project_1 /home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing/vivado_project -part xczu3eg-sbva484-1-i
+set_property board_part avnet.com:ultra96v2:part0:1.2 [current_project]
+git init
+git add .
