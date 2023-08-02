@@ -15,3 +15,5 @@ create_project project_1 /home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES
 set_property board_part avnet.com:ultra96v2:part0:1.2 [current_project]
 git init
 git add .
+git commit -m "first commit"
+git add .

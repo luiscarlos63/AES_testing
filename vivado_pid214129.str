@@ -136,3 +136,31 @@ setText(RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, "git init", true); // l
 // Tcl Command: 'git init'
 // Tcl Message: git init 
 // Tcl Command: 'rdi::info_commands {a*}'
+setText(RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, "git add .", true); // l
+// Tcl Command: 'git add .'
+// Tcl Command: 'git add .'
+// Tcl Message: git add . 
+// Tcl Command: 'rdi::info_commands {git*}'
+// Tcl Command: 'rdi::match_options {git} {}'
+// Tcl Command: 'rdi::match_options {git} {m}'
+// Elapsed time: 13 seconds
+setText(RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, "git commit -m \"first commit\"", true); // l
+// Tcl Command: 'git commit -m "first commit"'
+// Tcl Command: 'git commit -m "first commit"'
+// Tcl Message: git commit -m "first commit" 
+// TclEventType: PROJECT_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [Vivado-projutils-8] Tcl script 'project_1.tcl' generated in output directory '/home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing'  INFO: [Vivado-projutils-15] The file paths for the project source files were set relative to the location of the generated script. 
+// Tcl Message: project_1.tcl [master (root-commit) a452cc4] first commit  14 files changed, 4083 insertions(+)  create mode 100644 .gitignore  create mode 100644 project_1.tcl  create mode 100644 src/design/aes.v  create mode 100644 src/design/aes_core.v  create mode 100644 src/design/aes_decipher_block.v  create mode 100644 src/design/aes_encipher_block.v  create mode 100644 src/design/aes_inv_sbox.v  create mode 100644 src/design/aes_key_mem.v  create mode 100644 src/design/aes_sbox.v  create mode 100644 src/design/fifo_buff.v  create mode 100644 src/design/icap_inst.v  create mode 100644 vivado.jou  create mode 100644 vivado.log  create mode 100644 vivado_pid214129.str 
+dismissDialog("Tcl Command Line"); // bA

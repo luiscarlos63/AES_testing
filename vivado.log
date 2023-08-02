@@ -96,3 +96,25 @@ create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:05 . Memory (MB): pea
 set_property board_part avnet.com:ultra96v2:part0:1.2 [current_project]
 git init
 git add .
+git commit -m "first commit"
+INFO: [Vivado-projutils-8] Tcl script 'project_1.tcl' generated in output directory '/home/luiscarlos/Desktop/ultra/secure_tiles2/vivado/AES_testing'
+
+INFO: [Vivado-projutils-15] The file paths for the project source files were set relative to the location of the generated script.
+project_1.tcl
+[master (root-commit) a452cc4] first commit
+ 14 files changed, 4083 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 project_1.tcl
+ create mode 100644 src/design/aes.v
+ create mode 100644 src/design/aes_core.v
+ create mode 100644 src/design/aes_decipher_block.v
+ create mode 100644 src/design/aes_encipher_block.v
+ create mode 100644 src/design/aes_inv_sbox.v
+ create mode 100644 src/design/aes_key_mem.v
+ create mode 100644 src/design/aes_sbox.v
+ create mode 100644 src/design/fifo_buff.v
+ create mode 100644 src/design/icap_inst.v
+ create mode 100644 vivado.jou
+ create mode 100644 vivado.log
+ create mode 100644 vivado_pid214129.str
+git add .
