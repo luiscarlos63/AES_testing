@@ -27,7 +27,7 @@ proc checkRequiredFiles { origin_dir} {
  "[file normalize "$origin_dir/src/design/fifo_buff.v"]"\
  "[file normalize "$origin_dir/src/design/aes.v"]"\
  "[file normalize "$origin_dir/src/design/icap_inst.v"]"\
- "[file normalize "$origin_dir/src/sim/AXI_GPIO_tb.sv"]"\
+ "[file normalize "$origin_dir/src/sim/AES_AXI_tb.sv"]"\
   ]
   foreach ifile $files {
     if { ![file isfile $ifile] } {
@@ -135,6 +135,13 @@ set_property -name "revised_directory_structure" -value "1" -objects $obj
 set_property -name "sim.central_dir" -value "$proj_dir/${_xil_proj_name_}.ip_user_files" -objects $obj
 set_property -name "sim.ip.auto_export_scripts" -value "1" -objects $obj
 set_property -name "simulator_language" -value "Mixed" -objects $obj
+set_property -name "webtalk.activehdl_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.modelsim_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.questa_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.riviera_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.vcs_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.xsim_export_sim" -value "1" -objects $obj
+set_property -name "webtalk.xsim_launch_sim" -value "12" -objects $obj
 
 # Create 'sources_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sources_1] ""]} {
@@ -189,12 +196,12 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 # Set 'sim_1' fileset object
 set obj [get_filesets sim_1]
 set files [list \
- [file normalize "${origin_dir}/src/sim/AXI_GPIO_tb.sv"] \
+ [file normalize "${origin_dir}/src/sim/AES_AXI_tb.sv"] \
 ]
 add_files -norecurse -fileset $obj $files
 
 # Set 'sim_1' fileset file properties for remote files
-set file "$origin_dir/src/sim/AXI_GPIO_tb.sv"
+set file "$origin_dir/src/sim/AES_AXI_tb.sv"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sim_1] [list "*$file"]]
 set_property -name "file_type" -value "SystemVerilog" -objects $file_obj
@@ -205,8 +212,8 @@ set_property -name "file_type" -value "SystemVerilog" -objects $file_obj
 
 # Set 'sim_1' fileset properties
 set obj [get_filesets sim_1]
-set_property -name "top" -value "aes" -objects $obj
-set_property -name "top_file" -value "src/design/aes.v" -objects $obj
+set_property -name "top" -value "AES_AXI_tb" -objects $obj
+set_property -name "top_auto_set" -value "0" -objects $obj
 set_property -name "top_lib" -value "xil_defaultlib" -objects $obj
 
 # Set 'utils_1' fileset object

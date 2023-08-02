@@ -56,8 +56,8 @@
 //-----------------------------------------------------------------------------
 //Step 2 - Import two required packages: axi_vip_pkg and <component_name>_pkg.
 import axi_vip_pkg::*;
-import AXI_GPIO_Sim_axi_vip_0_0_pkg::*;
-import AXI_GPIO_Sim_axi_vip_1_0_pkg::*;
+import design_1_axi_vip_0_0_pkg::*;
+import design_1_axi_vip_1_0_pkg::*;
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -76,17 +76,17 @@ xil_axi_data_beat [255:0] ruser_full;
 bit[31:0]  addr, data, base_addr = 32'hC000_0000, switch_state;
 
 
-module AXI_GPIO_tb( );
+module AES_AXI_tb( );
 
 bit [255:0] dbg_key = 256'hF1;
-bit [1:0]dbg_ENCLEN = 2'b1_0;
+bit [127:0]   dbg_IV = 128'he2;
 
-AXI_GPIO_Sim_wrapper UUT
+design_1_wrapper UUT
 (
     .aclk               (aclk),
     .aresetn            (aresetn),
-    .dbg_key            (dbg_key),
-    .dbg_ENCLEN         (dbg_ENCLEN)
+    .in_key             (dbg_key),
+    .in_IV              (dbg_IV)
 );
 
 // Generate the clock : 50 MHz    
@@ -110,8 +110,8 @@ end
 //////////////////////////////////////////////////////////////////////////////////
 //
 // Step 3 - Declare the agent for the master VIP
-AXI_GPIO_Sim_axi_vip_0_0_mst_t      master_agent_vpi0;
-AXI_GPIO_Sim_axi_vip_1_0_mst_t      master_agent_vpi1;
+design_1_axi_vip_0_0_mst_t      master_agent_vpi0;
+design_1_axi_vip_1_0_mst_t      master_agent_vpi1;
  
 
  
@@ -155,8 +155,8 @@ bit [255:0] data_2;
 initial begin    
 
     // Step 4 - Create a new agent
-    master_agent_vpi0   = new("master vip agent 0",UUT.AXI_GPIO_Sim_i.axi_vip_0.inst.IF);
-    master_agent_vpi1   = new("master vip agent 1",UUT.AXI_GPIO_Sim_i.axi_vip_1.inst.IF);
+    master_agent_vpi0   = new("master vip agent 0",UUT.design_1_i.axi_vip_0.inst.IF);
+    master_agent_vpi1   = new("master vip agent 1",UUT.design_1_i.axi_vip_1.inst.IF);
     
     // Step 5 - Start the agent
     master_agent_vpi0.start_master();

@@ -389,8 +389,8 @@ end
 ////---------------------- AES ----------------------------------------------------------------
 wire ENCDEC;
 wire KEYLEN;
-assign ENCDEC = 0;      //DEC mode
-assign KEYLEN = 1;      //KEY LEN = 256 bit
+assign ENCDEC = 0;
+assign KEYLEN = 1;
 
 wire [255:0]    core_key;
 assign core_key = in_key;
@@ -716,5 +716,6 @@ end
 
 
 endmodule                           
+                      
 
 
