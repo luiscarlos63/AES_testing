@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-	module aes # 
+	module aes #
 	(
 		// Users to add parameters here
         
@@ -40,41 +40,8 @@
         input wire clk,
         input wire reset_n,
         
-        input wire          new_bit,
         input wire  [127:0] in_IV,
-        input wire  [255:0] dbg_key,
-        input wire  [1:0] dbg_ENCLEN        ,
-//        output wire dbg_ENCDEC     ,
-//        output wire dbg_core_init     ,
-//        output wire dbg_core_next     ,
-//        output wire dbg_core_ready    ,
-//        output wire [255:0]dbg_core_key      ,
-//        output wire  dbg_KEYLEN        ,
-//        output wire [127:0] dbg_core_block    ,
-//        output wire [127:0] dbg_core_result   ,
-//        output wire dbg_core_valid    ,
-        
-//        output wire [127:0] dbg_send_fifo_out,
-//        output wire [1:0]   dbg_send_4word_cnt,
-        
-        
-//        output wire dbg_send_fifo_empty    ,
-//        output wire [3:0]dbg_send_state         ,
-//        output wire [3:0]dbg_send_next_state    ,
-//        output wire dbg_send_fifo_re       ,
-//        output wire dbg_send_cnt_we        ,
-        
-//        output wire [3:0]       dbg_aes_state            ,
-//        output wire [3:0]       dbg_aes_next_state       ,
-//        output wire [127:0]     dbg_core_last_block      ,
-//        output wire             dbg_core_last_block_we   ,
-//        output wire             dbg_core_new_IV          ,
-//        output wire  [127:0]    dbg_core_result_cbc      ,
-        
-        
-        
-        
-        
+        input wire  [255:0] in_key,
         
 		// User ports ends
 		// Do not modify the ports beyond this line
@@ -135,33 +102,6 @@ assign		m00_axi_wvalid= 0;
 assign		m00_axi_bready= 0;
 
 
-
-//assign dbg_ENCDEC          = ENCDEC         ;
-//assign dbg_core_init       = core_init      ;
-//assign dbg_core_next       = core_next      ;
-//assign dbg_core_ready      = core_ready     ;
-//assign dbg_core_key        = core_key       ;
-//assign dbg_KEYLEN          = KEYLEN         ;
-//assign dbg_core_block      = core_block     ;
-//assign dbg_core_result     = core_result    ;
-//assign dbg_core_valid      = core_valid     ;
-
-//assign dbg_send_fifo_out    = send_fifo_out;
-//assign dbg_send_4word_cnt = send_4word_cnt;
-//assign dbg_send_fifo_empty   = send_fifo_empty   ; 
-//assign dbg_send_state        = send_state        ;
-//assign dbg_send_next_state   = send_next_state   ;
-//assign dbg_send_fifo_re      = send_fifo_re      ; 
-//assign dbg_send_cnt_we       = send_cnt_we       ; 
- 
- 
-//assign dbg_aes_state           = aes_state           ;
-//assign dbg_aes_next_state      = aes_next_state      ;
-//assign dbg_core_last_block     = core_last_block     ;
-//assign dbg_core_last_block_we  = core_last_block_we  ;
-//assign dbg_core_new_IV         = core_new_IV         ;
-//assign dbg_core_result_cbc     = core_result_cbc     ;
- 
  
 ///////////////////////////////////////////////////////////////////////////////// ADDRES DECODING ///////////////////////////////////////////////////////////////////////////
 
@@ -449,11 +389,11 @@ end
 ////---------------------- AES ----------------------------------------------------------------
 wire ENCDEC;
 wire KEYLEN;
-assign ENCDEC = dbg_ENCLEN[0:0];
-assign KEYLEN = dbg_ENCLEN[1:1];
+assign ENCDEC = 0;      //DEC mode
+assign KEYLEN = 1;      //KEY LEN = 256 bit
 
 wire [255:0]    core_key;
-assign core_key = dbg_key;
+assign core_key = in_key;
 
 reg             core_init;
 reg             core_next;
@@ -463,8 +403,8 @@ wire [127:0]    core_result;
 wire            core_valid;
 wire            core_ready;
 
-reg [127:0]     core_last_block;
-reg             core_last_block_we;
+reg [127:0]     core_last_result;
+reg             core_last_result_we;
 reg             core_new_IV;
 wire [127:0]    core_result_cbc;
 
@@ -525,18 +465,18 @@ reg [3:0] aes_state;
 reg [3:0] aes_next_state;
 
 always @(posedge clk)begin
-    if(!reset_n || new_bit)begin     //reset or there is a new bit so we need to update the Initialization Vector (IV)
+    if(!reset_n)begin
         aes_state <= AES_ST_Init;
     end
     else begin
         aes_state <= aes_next_state;
     end //else begin
     
-    if(core_last_block_we)begin
+    if(core_last_result_we)begin
         if(core_new_IV)
-        core_last_block <= in_IV;
+        core_last_result <= in_IV;
         else
-        core_last_block <= core_block;
+        core_last_result <= core_block;
     end
     
         
@@ -588,7 +528,7 @@ always@(*)begin
     core_next       = 0;
     core_init       = 0;
     send_fifo_we    = 0;
-    core_last_block_we = 0;
+    core_last_result_we = 0;
     core_new_IV     = 0; 
     
    
@@ -596,7 +536,7 @@ always@(*)begin
         AES_ST_Init:begin
 //            core_init = 1;
             core_new_IV = 1;
-            core_last_block_we = 1;       
+            core_last_result_we = 1;       
         end
         AES_ST_Idle:begin
             
@@ -618,7 +558,7 @@ always@(*)begin
         end
         AES_ST_GetResult:begin
             send_fifo_we = 1;
-                        core_last_block_we = 1;          
+                        core_last_result_we = 1;          
 
 
         end
@@ -627,7 +567,7 @@ always@(*)begin
 end
 
 
-assign core_result_cbc = core_result ^ core_last_block;   //XOR with last block for CBC
+assign core_result_cbc = core_result ^ core_last_result;   //XOR with last result for CBC
 
 ///////////////////////////////////////////////////////////////////////////// DATA SEND ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // -------------------------------- SEND fifo ------------------------------------------
